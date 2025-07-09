@@ -1,243 +1,915 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <link rel="stylesheet" type="text/css" href="dep/normalize.css/normalize.css" />
-    <link rel="stylesheet" type="text/css" href="dep/Font-Awesome/css/font-awesome.css" />
-    <link rel="stylesheet" type="text/css" href="style.css" />
-  </head>
-  <body lang="en">
-    <section id="main">
-      <header id="title">
-        <h1>John Doe</h1>
-        <span class="subtitle">Plaintiff, defendant &amp; witness</span>
-      </header>
-      <section class="main-block">
-        <h2>
-          <i class="fa fa-suitcase"></i> Experiences
-        </h2>
-        <section class="blocks">
-          <div class="date">
-            <span>2015</span><span>present</span>
-          </div>
-          <div class="decorator">
-          </div>
-          <div class="details">
-            <header>
-              <h3>Some Position</h3>
-              <span class="place">Some Workplace</span>
-              <span class="location">(remote)</span>
-            </header>
-            <div>
-              <ul>
-                <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit</li>
-                <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec mi ante. Etiam odio eros, placerat eu metus id, gravida eleifend odio. Vestibulum dapibus pharetra odio, egestas ullamcorper ipsum congue ac. Maecenas viverra tortor eget convallis vestibulum. Donec pulvinar venenatis est, non sollicitudin metus laoreet sed. Fusce tincidunt felis nec neque aliquet porttitor</li>
-              </ul>
-              </div>
-          </div>
-        </section>
-        <section class="blocks">
-          <div class="date">
-            <span>2014</span><span>2015</span>
-          </div>
-          <div class="decorator">
-          </div>
-          <div class="details">
-            <header>
-              <h3>Another Position</h3>
-              <span class="place">Some Workplace</span>
-              <span class="location">Some City, Some Country</span>
-            </header>
-            <div>
-              <ul>
-                <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit</li>
-                <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit</li>
-                <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit</li>
-              </ul>
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>祝彦翔 - 个人网站</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family:
+                "Times New Roman", Times, serif,
+                "宋体", SimSun, "STSong", "NSimSun", serif;
+            color: #23272f;
+            line-height: 1.7;
+            background: linear-gradient(135deg, #f5faff 0%, #e6f0ff 100%);
+            min-height: 100vh;
+            font-size: 1.2rem;
+        }
+        .logo, #hero h1, h2, nav a, .skills-card h3, .research-card h3,
+        #hero p, .skills-card, .research-card, .project-card, .skills-subtitle, .skills-card li, .research-list li, .research-desc, .research-supervisor, .research-link, .awards-btn, .language-switcher button {
+            font-family:
+                "Times New Roman", Times, serif,
+                "宋体", SimSun, "STSong", "NSimSun", serif;
+        }
+        .skills-card,
+        .research-card
+        {
+            font-size: 1.2rem;
+        }
+        .project-card {
+            font-size: 1.2rem;
+        }
+        .skills-card li,
+        .research-list li,
+        .research-desc,
+        .research-supervisor,
+        .research-link {
+            font-size: 1.2rem;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 3.5vw 1.2rem 3.5vw;
+            background: rgba(255,255,255,0.97);
+            box-shadow: 0 2px 12px rgba(0,123,255,0.07);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 2px solid #e0eaff;
+        }
+        .logo {
+            font-size: 2.1rem;
+            font-weight: 800;
+            color: #007bff;
+            letter-spacing: 2px;
+            text-shadow: 0 2px 8px rgba(0,123,255,0.08);
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+            flex-shrink: 0;
+        }
+        .header-right {
+            display: flex;
+            align-items: center;
+            flex: 1 1 auto;
+            justify-content: flex-end;
+            min-width: 0;
+        }
+        nav {
+            flex: 1 1 auto;
+            display: flex;
+            justify-content: flex-end;
+            min-width: 0;
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2.2rem;
+            align-items: center;
+            min-width: 0;
+            flex-wrap: nowrap;
+        }
+        nav li {
+            min-width: 0;
+        }
+        nav a {
+            text-decoration: none;
+            color: #23272f;
+            font-weight: 600;
+            font-size: 1.06rem;
+            padding: 0.4rem 1.1rem;
+            border-radius: 18px;
+            transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+            white-space: nowrap;
+            letter-spacing: 0.5px;
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+            display: inline-block;
+        }
+        nav a:hover, nav a.active {
+            background: linear-gradient(90deg,#007bff 60%,#00c6ff 100%);
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(0,123,255,0.10);
+        }
+        .language-switcher {
+            display: flex;
+            gap: 0.5rem;
+            margin-left: 2.5rem;
+            flex-shrink: 0;
+        }
+        .language-switcher button {
+            padding: 0.45rem 1.1rem;
+            border: none;
+            background-color: #e0e0e0;
+            cursor: pointer;
+            border-radius: 7px;
+            font-weight: 600;
+            font-size: 1.02rem;
+            transition: background 0.3s, color 0.3s;
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+        }
+        .language-switcher button.active {
+            background: linear-gradient(90deg,#007bff 60%,#00c6ff 100%);
+            color: #fff;
+        }
+        main {
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 3.5rem 2.5vw 2.5rem 2.5vw;
+        }
+        section {
+            margin-bottom: 4rem;
+        }
+        @keyframes float {
+            0% { transform: translateY(0);}
+            100% { transform: translateY(-18px);}
+        }
+        /* 新高级封面 */
+        #hero {
+            position: relative;
+            min-height: 480px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 2.5rem;
+            overflow: hidden;
+        }
+        #hero-bg-gradient {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%; z-index: 0;
+            pointer-events: none;
+            background: radial-gradient(ellipse 80% 60% at 50% 30%, #b3e0ff 0%, #e6f0ff 60%, #fff 100%);
+        }
+        #hero-bg-svg {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%; z-index: 1;
+            pointer-events: none;
+        }
+        #hero-content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 2.5rem;
+        }
+        #hero img {
+            width: 170px;
+            height: 170px;
+            object-fit: cover;
+            border-radius: 50%;
+            box-shadow: 0 8px 32px rgba(0,123,255,0.18);
+            margin-bottom: 2.2rem;
+            animation: float 3s ease-in-out infinite alternate;
+            border: 6px solid #fff;
+        }
+        #hero h1 {
+            font-size: 2.7rem;
+            margin-bottom: 1.1rem;
+            letter-spacing: 2px;
+            font-weight: 800;
+            color: #007bff;
+            text-shadow: 0 2px 8px rgba(0,123,255,0.08);
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+        }
+        #hero p {
+            font-size: 1.35rem;
+            color: #23272f;
+            font-weight: 500;
+            margin-bottom: 0;
+            background: rgba(255,255,255,0.8);
+            padding: 0.7rem 1.5rem;
+            border-radius: 18px;
+            box-shadow: 0 2px 8px rgba(0,123,255,0.06);
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+        }
+        h2 {
+            font-size: 1.7rem;
+            margin-bottom: 1.5rem;
+            color: #007bff;
+            border-bottom: 2px solid #007bff;
+            display: inline-block;
+            background: linear-gradient(90deg,#e6f0ff 60%,#fff 100%);
+            padding: 0 1.2rem 0.2rem 0;
+            border-radius: 0 0 12px 0;
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+            font-weight: 700;
+        }
+        ul { list-style: none; }
+        ul li { margin-bottom: 1rem; }
+        a { color: #007bff; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(255,255,255,0.95);
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.07);
+            font-weight: 500;
+            font-size: 1.08rem;
+            letter-spacing: 1px;
+        }
+        html { scroll-behavior: smooth; }
+        .projects-flex {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        .project-card {
+            background: rgba(255,255,255,0.92);
+            border-radius: 18px;
+            box-shadow: 0 4px 32px rgba(0,123,255,0.10);
+            border: 1.5px solid rgba(0,123,255,0.08);
+            padding: 2rem 1.5rem 1.5rem 1.5rem;
+            flex: 1 1 200px;
+            min-width: 200px;
+            max-width: 48%;
+            margin-bottom: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            align-items: flex-start;
+            transition: transform 0.25s cubic-bezier(.4,2,.6,1), box-shadow 0.25s;
+            position: relative;
+            overflow: hidden;
+        }
+        .project-card:hover {
+            transform: translateY(-8px) scale(1.025);
+            box-shadow: 0 8px 40px rgba(0,123,255,0.18);
+            border-color: #007bff33;
+        }
+        .project-card .project-icon {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+            color: #00b894;
+            filter: drop-shadow(0 2px 8px #b3e0ff);
+        }
+        .project-card h4 {
+            font-size: 1.13rem;
+            color: #007bff;
+            font-weight: 700;
+            margin-bottom: 0.4rem;
+            letter-spacing: 0.5px;
+        }
+        .project-card .project-link {
+            margin-top: 0.8rem;
+            display: inline-block;
+            background: linear-gradient(90deg,#007bff 60%,#00c6ff 100%);
+            color: #fff;
+            padding: 0.4rem 1.2rem;
+            border-radius: 20px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: background 0.2s;
+            box-shadow: 0 1px 4px rgba(0,123,255,0.10);
+            font-size: 1.01rem;
+            letter-spacing: 0.5px;
+            border: none;
+        }
+        .project-card .project-link:hover {
+            background: linear-gradient(90deg,#0056b3 60%,#00c6ff 100%);
+        }
+        .skills-flex {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        .skills-card {
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(8px);
+            border-radius: 18px;
+            box-shadow: 0 4px 32px rgba(0,123,255,0.10);
+            transition: transform 0.25s cubic-bezier(.4,2,.6,1), box-shadow 0.25s;
+            border: 1.5px solid rgba(0,123,255,0.08);
+            padding: 2rem 2rem 1.5rem 2rem;
+            flex: 1 1 350px;
+            min-width: 320px;
+            max-width: 48%;
+            margin-bottom: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+        .skills-card:hover {
+            transform: translateY(-8px) scale(1.025);
+            box-shadow: 0 8px 40px rgba(0,123,255,0.18);
+            border-color: #007bff33;
+        }
+        .skills-card h3 {
+            color: #007bff;
+            font-size: 1.18rem;
+            margin-bottom: 0.5rem;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 0.3rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .skills-group {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+        .skills-subgroup {
+            margin-bottom: 0.5rem;
+        }
+        .skills-subtitle {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.3rem;
+            font-size: 1.01rem;
+        }
+        .skills-card ul {
+            margin-left: 1.2rem;
+            margin-bottom: 0.2rem;
+        }
+        .skills-card li {
+            margin-bottom: 0.3rem;
+            line-height: 1.7;
+            font-size: 0.99rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .skill-tag {
+            display: inline-block;
+            margin-left: 8px;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: 600;
+            background: linear-gradient(90deg,#007bff 60%,#00c6ff 100%);
+            color: #fff;
+            box-shadow: 0 1px 4px rgba(0,123,255,0.10);
+            letter-spacing: 1px;
+        }
+        .skill-tag.master { background: linear-gradient(90deg,#007bff 60%,#00c6ff 100%);}
+        .skill-tag.good { background: linear-gradient(90deg,#00b894 60%,#00c6ff 100%);}
+        .awards-btn {
+            display: inline-block;
+            margin-top: 1.2rem;
+            background: linear-gradient(90deg,#007bff 60%,#00c6ff 100%);
+            color: #fff;
+            padding: 0.6rem 2rem;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 1.08rem;
+            letter-spacing: 1px;
+            box-shadow: 0 2px 8px rgba(0,123,255,0.10);
+            border: none;
+            transition: background 0.2s, transform 0.2s;
+            text-decoration: none;
+        }
+        .awards-btn:hover {
+            background: linear-gradient(90deg,#0056b3 60%,#00c6ff 100%);
+            transform: translateY(-2px) scale(1.04);
+        }
+        .research-flex {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        .research-card {
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(8px);
+            border-radius: 18px;
+            box-shadow: 0 4px 32px rgba(0,123,255,0.10);
+            transition: transform 0.25s cubic-bezier(.4,2,.6,1), box-shadow 0.25s;
+            border: 1.5px solid rgba(0,123,255,0.08);
+            padding: 2rem 2rem 1.5rem 2rem;
+            flex: 1 1 350px;
+            min-width: 320px;
+            max-width: 48%;
+            margin-bottom: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+        .research-card:hover {
+            transform: translateY(-8px) scale(1.025);
+            box-shadow: 0 8px 40px rgba(0,123,255,0.18);
+            border-color: #007bff33;
+        }
+        .research-card h3 {
+            color: #007bff;
+            font-size: 1.13rem;
+            margin-bottom: 0.7rem;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 0.3rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .research-list {
+            margin-left: 1.2rem;
+            margin-bottom: 0.2rem;
+        }
+        .research-list li {
+            margin-bottom: 0.5rem;
+            line-height: 1.7;
+            font-size: 0.99rem;
+        }
+        .research-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.7rem;
+        }
+        .research-topic {
+            font-weight: 600;
+            color: #007bff;
+            font-size: 1.08rem;
+        }
+        .research-desc {
+            color: #333;
+            font-size: 1rem;
+        }
+        .research-supervisor {
+            color: #666;
+            font-size: 0.98rem;
+        }
+        .research-link {
+            color: #007bff;
+            font-size: 0.98rem;
+        }
+        @media (max-width: 1100px) {
+            main {
+                max-width: 98vw;
+                padding-left: 2vw;
+                padding-right: 2vw;
+            }
+        }
+        @media (max-width: 900px) {
+            .skills-flex, .research-flex, .projects-flex {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+            .skills-card, .research-card, .project-card {
+                max-width: 100%;
+                min-width: unset;
+            }
+            header {
+                flex-direction: column;
+                padding: 1rem 0.5rem;
+            }
+            .header-right, nav {
+                width: 100%;
+                justify-content: center;
+            }
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+            }
+            main {
+                padding: 1.5rem 0.5rem;
+            }
+            .language-switcher {
+                margin-left: 0;
+                margin-top: 1rem;
+            }
+        }
+        @media (max-width: 600px) {
+            #hero h1 { font-size: 1.45rem; }
+            #hero p { font-size: 1rem; }
+            .logo { font-size: 1.1rem; }
+            h2 { font-size: 1.1rem; }
+            main { padding-left: 0.5rem; padding-right: 0.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo" data-i18n="name"></div>
+        <div class="header-right">
+            <nav>
+                <ul>
+                    <li><a href="#about" data-i18n="about"></a></li>
+                    <li><a href="#education" data-i18n="education"></a></li>
+                    <li><a href="#research" data-i18n="research"></a></li>
+                    <li><a href="#projects" data-i18n="projects"></a></li>
+                    <li><a href="#skills" data-i18n="skills"></a></li>
+                    <li><a href="#achievements" data-i18n="achievements"></a></li>
+                    <li><a href="#student-social" data-i18n="student_social"></a></li>
+                    <li><a href="#contact" data-i18n="contact"></a></li>
+                </ul>
+            </nav>
+            <div class="language-switcher">
+                <button onclick="switchLanguage('en')">EN</button>
+                <button onclick="switchLanguage('zh')">ZH</button>
             </div>
-          </div>
-        </section>
-        <section class="blocks">
-          <div class="date">
-            <span>2013</span><span>2014</span>
-          </div>
-          <div class="decorator">
-          </div>
-          <div class="details">
-            <header>
-              <h3>Yet Another Job Position</h3>
-              <span class="place">Some Workplace</span>
-              <span class="location">Some City, Some Country</span>
-            </header>
-            <div>
-              <ul>
-                <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec mi ante. Etiam odio eros, placerat eu metus id, gravida eleifend odio</li>
-                <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit</li>
-              </ul>
-              </div>
-          </div>
-        </section>
-      </section>
-      <section class="main-block">
-        <h2>
-          <i class="fa fa-folder-open"></i> Selected Projects
-        </h2>
-        <section class="blocks">
-          <div class="date">
-            <span>2015</span><span>2016</span>
-          </div>
-          <div class="decorator">
-          </div>
-          <div class="details">
-            <header>
-              <h3>Some Project 1</h3>
-              <span class="place">Some workplace</span>
-            </header>
-            <div>
-              <ul>
-                <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit</li>
-                <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec mi ante. Etiam odio eros, placerat eu metus id, gravida eleifend odio. Vestibulum dapibus pharetra odio, egestas ullamcorper ipsum congue ac</li>
-                <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec mi ante. Etiam odio eros, placerat eu metus id, gravida eleifend odio</li>
-              </ul>
+        </div>
+    </header>
+    <main>
+        <section id="hero">
+            <div id="hero-bg-gradient"></div>
+            <svg id="hero-bg-svg" viewBox="0 0 1440 320" preserveAspectRatio="none">
+                <defs>
+                    <linearGradient id="heroGradient2" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0%" stop-color="#7fd0ff"/>
+                        <stop offset="100%" stop-color="#e6f0ff"/>
+                    </linearGradient>
+                </defs>
+                <ellipse cx="720" cy="120" rx="650" ry="110" fill="url(#heroGradient2)" fill-opacity="0.45"/>
+                <ellipse cx="900" cy="200" rx="320" ry="60" fill="#b3e0ff" fill-opacity="0.18"/>
+                <ellipse cx="400" cy="180" rx="250" ry="50" fill="#00c6ff" fill-opacity="0.10"/>
+            </svg>
+            <div id="hero-content">
+                <img src="photo.jpg" alt="照片">
+                <h1 data-i18n="name"></h1>
+                <p data-i18n="tagline"></p>
             </div>
-          </div>
         </section>
-        <section class="blocks">
-          <div class="date">
-            <span>2014</span><span>2015</span>
-          </div>
-          <div class="decorator">
-          </div>
-          <div class="details">
-            <header>
-              <h3>Some Project 2</h3>
-              <span class="place">Some workplace</span>
-            </header>
-            <div>
-              <ul>
-                <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec mi ante. Etiam odio eros, placerat eu metus id, gravida eleifend odio. Vestibulum dapibus pharetra odio, egestas ullamcorper ipsum congue ac. Maecenas viverra tortor eget convallis vestibulum. Donec pulvinar venenatis est, non sollicitudin metus laoreet sed. Fusce tincidunt felis nec neque aliquet porttitor</li>
-              </ul>
+        <section id="about">
+            <h2 data-i18n="about"></h2>
+            <ul>
+                <li data-i18n="bio1"></li>
+                <li data-i18n="bio2"></li>
+                <li data-i18n="bio3"></li>
+            </ul>
+        </section>
+        <section id="education">
+            <h2 data-i18n="education"></h2>
+            <ul>
+                <li data-i18n="education1"></li>
+                <li data-i18n="education2"></li>
+                <li data-i18n="education3"></li>
+                <li data-i18n="education4"></li>
+                <li data-i18n="education5"></li>
+            </ul>
+        </section>
+        <section id="research">
+            <h2 data-i18n="research"></h2>
+            <div class="research-flex">
+                <div class="research-card">
+                    <h3><span style="margin-right:8px;">🔬</span><span data-i18n="research_interests_title"></span></h3>
+                    <ul class="research-list">
+                        <li data-i18n="interest1"></li>
+                        <li data-i18n="interest2"></li>
+                        <li data-i18n="interest3"></li>
+                        <li data-i18n="interest4"></li>
+                    </ul>
+                </div>
+                <div class="research-card">
+                    <h3><span style="margin-right:8px;">🧪</span><span data-i18n="current_research_title"></span></h3>
+                    <div class="research-group">
+                        <div class="research-topic" data-i18n="current_research_project"></div>
+                        <div class="research-desc" data-i18n="current_research_desc"></div>
+                        <div class="research-supervisor"><span data-i18n="supervisor"></span></div>
+                        <div class="research-link"><span data-i18n="project_github"></span></div>
+                    </div>
+                </div>
             </div>
-          </div>
         </section>
-        <section class="blocks">
-          <div class="date">
-            <span>2014</span>
-          </div>
-          <div class="decorator">
-          </div>
-          <div class="details">
-            <header>
-              <h3>Some Project 3</h3>
-              <span class="place">Some workplace</span>
-            </header>
-            <div>
-              <ul>
-                <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec mi ante. Etiam odio eros, placerat eu metus id, gravida eleifend odio</li>
-              </ul>
+        <section id="projects">
+            <h2 data-i18n="projects"></h2>
+            <div class="projects-flex">
+                <div class="project-card">
+                    <div class="project-icon">🔊</div>
+                    <h4 data-i18n="project_ic_design"></h4>
+                    <a class="project-link" href="projects.html#ic-design" target="_blank" data-i18n="project_ic_design"></a>
+                </div>
+                <div class="project-card">
+                    <div class="project-icon">🛠️</div>
+                    <h4 data-i18n="project_eda"></h4>
+                    <a class="project-link" href="projects.html#eda" target="_blank" data-i18n="project_eda"></a>
+                </div>
+                <div class="project-card">
+                    <div class="project-icon">⚡</div>
+                    <h4 data-i18n="project_fpga"></h4>
+                    <a class="project-link" href="projects.html#fpga" target="_blank" data-i18n="project_fpga"></a>
+                </div>
+                <div class="project-card">
+                    <div class="project-icon">💻</div>
+                    <h4 data-i18n="project_others"></h4>
+                    <a class="project-link" href="projects.html#others" target="_blank" data-i18n="project_others"></a>
+                </div>
             </div>
-          </div>
         </section>
-      </section>
-      <section class="main-block concise">
-        <h2>
-          <i class="fa fa-graduation-cap"></i> Education
-        </h2>
-        <section class="blocks">
-          <div class="date">
-            <span>2009</span><span>2014</span>
-          </div>
-          <div class="decorator">
-          </div>
-          <div class="details">
-            <header>
-              <h3>Ph.D. in Forty-Two Discovery</h3>
-              <span class="place">Inexistent University</span>
-              <span class="location">Some City, Some Country</span>
-            </header>
-            <div>Relationship of the number with the answer to life, the universe and everything</div>
-          </div>
-        </section>
-        <section class="blocks">
-          <div class="date">
-            <span>2005</span><span>2009</span>
-          </div>
-          <div class="decorator">
-          </div>
-          <div class="details">
-            <header>
-              <h3>LL.B. in H&aelig;matophagic Economics</h3>
-              <span class="place">Inexistent University</span>
-              <span class="location">Some City, Some Country</span>
-            </header>
-            <div>President's Scholarship</div>
-          </div>
-        </section>
-        <section class="blocks">
-          <div class="date">
-            <span>2005</span><span>2009</span>
-          </div>
-          <div class="decorator">
-          </div>
-          <div class="details">
-            <header>
-              <h3>B.S. in Existential Science (Double Major)</h3>
-              <span class="place">Inexistent University</span>
-              <span class="location">Some City, Some Country</span>
-            </header>
-            <div>President's Scholarship</div>
-          </div>
-        </section>
-        <section class="blocks">
-          <div class="date">
-          </div>
-          <div class="decorator">
-          </div>
-          <div class="details">
-            <header>
-              <h3>Massive Online Fee&ndash;Required Course (selective list)</h3>
-            </header>
-            <div class="concise">
-              <ul>
-                <li>Introduction to something else</li>
-                <li>Introduction to some more useless things</li>
-                <li>Philosophy in practice</li>
-                <li>Recursive research and its impact on recursive research</li>
-                <li>Artificial politics</li>
-              </ul>
+        <section id="skills">
+            <h2 data-i18n="skills"></h2>
+            <div class="skills-flex">
+                <div class="skills-card">
+                    <h3><span style="margin-right:8px;">💻</span><span data-i18n="dev_ability_title"></span></h3>
+                    <div class="skills-group">
+                        <div class="skills-subgroup">
+                            <div class="skills-subtitle" data-i18n="coding_ability"></div>
+                            <ul>
+                                <li>
+                                    <li>
+                                    <span data-i18n="hardware_lang1"></span>
+                                    </li>
+                                    <li>
+                                    <span class="skill-tag master" data-i18n="proficient"></span>
+                                    <span data-i18n="hardware_lang2"></span>
+                                    </li>
+                                </li>
+                                <li>
+                                    <li>
+                                    <span data-i18n="high_level_lang1"></span>
+                                    </li>
+                                    <li>
+                                    <span class="skill-tag master" data-i18n="proficient"></span>
+                                    <span data-i18n="high_level_lang2"></span>
+                                    </li>
+                                    <li>
+                                    <span class="skill-tag good" data-i18n="skilled"></span>
+                                    <span data-i18n="high_level_lang3"></span>
+                                    </li>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="skills-subgroup">
+                            <div class="skills-subtitle" data-i18n="eda_tools"></div>
+                            <ul>
+                                <li data-i18n="quartus"></li>
+                                <li data-i18n="vivado"></li>
+                                <li data-i18n="modelsim"></li>
+                                <li data-i18n="synopsys"></li>
+                                <li data-i18n="ufde_rabbit"></li>
+                            </ul>
+                        </div>
+                        <div class="skills-subgroup">
+                            <div class="skills-subtitle" data-i18n="other_tools"></div>
+                            <ul>
+                                <li data-i18n="linux"></li>
+                                <li data-i18n="pytorch"></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="skills-card">
+                    <h3><span style="margin-right:8px;">🌐</span><span data-i18n="lang_ability_title"></span></h3>
+                    <div class="skills-group">
+                        <div class="skills-subgroup">
+                            <div class="skills-subtitle" data-i18n="english"></div>
+                            <ul>
+                                <li data-i18n="ielts"></li>
+                                <li data-i18n="gre"></li>
+                                <li data-i18n="toefl"></li>
+                            </ul>
+                        </div>
+                        <div class="skills-subgroup">
+                            <div class="skills-subtitle" data-i18n="spanish"></div>
+                            <ul>
+                                <li data-i18n="spanish_course"></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
         </section>
-      </section>
-    </section>
-    <aside id="sidebar">
-      <div class="side-block" id="contact">
-        <h1>
-          Contact Info
-        </h1>
-        <ul>
-          <li><i class="fa fa-globe"></i> johndoe.gtld</li>
-          <li><i class="fa fa-linkedin"></i> linkedin.com/in/john</li>
-          <li><i class="fa fa-envelope"></i> me@johndoe.gtld</li>
-          <li><i class="fa fa-phone"></i> 800.000.0000</li>
-        </ul>
-      </div>
-      <div class="side-block" id="skills">
-        <h1>
-          Skills
-        </h1>
-        <ul>
-          <li>Omnipresence</li>
-          <li>Anonymity</li>
-        </ul>
-        <ul>
-          <li>Ordinarity</li>
-          <li>No name rights</li>
-        </ul>
-      </div>
-      <div class="side-block" id="disclaimer">
-        This r&eacute;sum&eacute; was wholly typeset with HTML/CSS &mdash; see <code>git.io/vVSYL</code>
-      </div>
-    </aside>
-  </body>
+        <section id="achievements">
+            <h2 data-i18n="achievements"></h2>
+            <p data-i18n="achievements_desc"></p>
+            <a href="awards.html" class="awards-btn" data-i18n="awards_link"></a>
+        </section>
+        <section id="student-social">
+            <h2 data-i18n="student_social"></h2>
+            <div class="skills-flex">
+                <div class="skills-card">
+                    <h3 data-i18n="student_work_title"></h3>
+                    <p data-i18n="student_work_intro"></p>
+                    <a href="student_work.html" class="detail-link" data-i18n="student_work_detail" target="_blank"></a>
+                </div>
+                <div class="skills-card">
+                    <h3 data-i18n="social_activities_title"></h3>
+                    <p data-i18n="social_activities_intro"></p>
+                    <a href="social_activities.html" class="detail-link" data-i18n="social_activities_detail" target="_blank"></a>
+                </div>
+            </div>
+        </section>
+        <section id="contact">
+            <h2 data-i18n="contact"></h2>
+            <p data-i18n="phone"></p>
+            <p data-i18n="email"></p>
+            <p data-i18n="linkedin"></p>
+            <p data-i18n="github"></p>
+        </section>
+    </main>
+    <footer>
+        <p data-i18n="footer"></p>
+    </footer>
+    <script>
+        const translations = {
+            en: {
+                name: "Yanxiang Zhu",
+                tagline: "Undergraduate Student in Microelectronics",
+                about: "About Me",
+                bio1: "Present Location: Shanghai, China",
+                bio2: "Date of Birth: 2004/08/06",
+                bio3: "I am an undergraduate student majoring in Microelectronics at Fudan University, with a focus on digital IC design and FPGA acceleration. My academic and research interests lie in advancing integrated circuit technologies and hardware optimization for cutting-edge applications.",
+                education: "Education",
+                education1: "Fudan University - School of Microelectronics (2022.9 - 2026.6)",
+                education2: "University of Hong Kong (Exchange) (2024.8 - 2024.12)",
+                education3: "University of Texas at Austin (Exchange: Engineering Physics Program) (2023.7 - 2023.8)",
+                education4: "Nanjing Normal University Affiliated Middle School (2019.9 - 2022.6)",
+                education5: "Nanjing Normal University Affiliated Shuren Middle School (2016.9 - 2019.6)",
+                research: "Research",
+                research_interests_title: "Research Interests",
+                interest1: "Digital integrated circuits and system-level optimization",
+                interest2: "FPGA-based hardware acceleration and neural network inference",
+                interest3: "EDA automation tools and high-level synthesis (HLS)",
+                interest4: "Neuromorphic computing and randomized neural architectures",
+                current_research_title: "Current Research",
+                current_research_project: "FPGA Acceleration of Randomized Neural Networks (2023.9 - 2025.12)",
+                current_research_desc: "National Natural Science Foundation project. Paper submission planned for December 2025. (Detailed introduction to be added)",
+                supervisor: "Supervisor: Prof. Jiang Xiao (Fudan University)",
+                project_github: "Project GitHub: [To be organized]",
+                projects: "Projects",
+                project_ic_design: "ADDA Projects",
+                project_eda: "EDA Projects",
+                project_fpga: "FPGA Projects",
+                project_others: "Other Projects",
+                skills: "Skills",
+                dev_ability_title: "Development Ability",
+                coding_ability: "Coding Skills",
+                hardware_lang1: "Hardware Languages:",
+                hardware_lang2: "Verilog, VHDL",
+                high_level_lang1: "High-level Languages:",
+                high_level_lang2: "Python, C",
+                high_level_lang3: "C++, MATLAB",
+                eda_tools: "EDA Tools",
+                quartus: "Quartus II (with Altera DE2 board)",
+                vivado: "Vivado (with Xilinx XC7A35T & XC7A200T boards)",
+                modelsim: "ModelSim",
+                synopsys: "Synopsys DC (Design Compiler)",
+                ufde_rabbit: "Tested FUDAN EDA tool UFDE+ and board tool Rabbit",
+                other_tools: "Other Tools & Frameworks",
+                linux: "Proficient in Linux systems",
+                pytorch: "Proficient in AI frameworks such as PyTorch",
+                lang_ability_title: "Language Ability",
+                english: "English:",
+                ielts: "IELTS 7.0 (Listening: 7.5, Reading: 8.5, Writing: 6.5, Speaking: 6.0)",
+                gre: "GRE [to be added after exam]",
+                toefl: "TOEFL [To be added after exam]",
+                spanish: "Spanish:",
+                spanish_course: "Completed Fudan University Spanish course, planning to take DELE A2 in 2026",
+                proficient: "Proficient",
+                skilled: "Skilled",
+                achievements: "Achievements",
+                achievements_desc: "Recognized for academic excellence, research contributions, and extracurricular leadership.",
+                awards_link: "View Detailed Awards",
+                contact: "Contact",
+                phone: "Phone & WhatsApp: +86 186 5282 9333",
+                email: "Email: m18652829333@163.com / 22307130073@m.fudan.edu.cn",
+                linkedin: "LinkedIn: www.linkedin.com/in/yanxiang-zhu",
+                github: "GitHub: https://github.com/Yanxiang-ZHU",
+                footer: "Made by Yanxiang Zhu · © 2025",
+                student_social: "Work & Activities",
+                student_work_title: "Student Work Experience",
+                student_work_intro: "Actively involved in student union and class affairs, organizing events and promoting academic engagement.",
+                student_work_detail: "See details of student work",
+                social_activities_title: "Social Activities & Volunteering",
+                social_activities_intro: "Participated in various outreach and volunteer activities, contributing to society and personal growth.",
+                social_activities_detail: "See details of social activities"
+            },
+            zh: {
+                name: "祝彦翔",
+                tagline: "微电子本科生",
+                about: "关于我",
+                bio1:"现居地：中国上海",
+                bio2:"出生日期：2004/08/06",
+                bio3: "我是复旦大学微电子学院的本科生，主修微电子，专注于数字IC设计与FPGA加速。我的学术与研究兴趣在于推动集成电路技术的发展以及尖端应用的硬件优化。",
+                education: "教育经历",
+                education1: "复旦大学 - 微电子学院 (2022.9 - 2026.6)",
+                education2: "香港大学(交换) (2024.8 - 2024.12)",
+                education3: "美国得州大学奥斯汀分校(交换, 工程物理项目) (2023.7 - 2023.8)",
+                education4: "南京师范大学附属中学 (2019.9 - 2022.6)",
+                education5: "南京师大附中树人中学 (2016.9 - 2019.6)",
+                research: "科研",
+                research_interests_title: "科研兴趣",
+                interest1: "数字集成电路与系统级优化",
+                interest2: "基于FPGA的硬件加速与神经网络推理",
+                interest3: "EDA自动化工具与高层次综合（HLS）",
+                interest4: "神经形态计算与随机神经架构",
+                current_research_title: "科研情况",
+                current_research_project: "随机序列神经网络的FPGA加速实现（2023.9~2025.12）",
+                current_research_desc: "国家自然科学基金项目，预计2025年12月投稿论文。（详细简介待补充）",
+                supervisor: "指导老师：肖江（复旦大学教授）",
+                project_github: "项目GitHub网站：【待整理，还没搞】",
+                projects: "项目经历",
+                project_ic_design: "ADDA方向项目",
+                project_eda: "EDA方向项目",
+                project_fpga: "FPGA方向项目",
+                project_others: "其他项目",
+                skills: "技能",
+                dev_ability_title: "开发能力",
+                coding_ability: "代码能力",
+                hardware_lang1: "硬件语言：",
+                hardware_lang2: "Verilog, VHDL",
+                high_level_lang1: "高层次语言：",
+                high_level_lang2: "Python, C",
+                high_level_lang3: "C++, MATLAB",
+                eda_tools: "EDA工具",
+                quartus: "Quartus II（配合Altera DE2开发板开发）",
+                vivado: "Vivado（配合Xilinx XC7A35T & XC7A200T开发）",
+                modelsim: "ModelSim",
+                synopsys: "Synopsys DC (Design Compiler)",
+                ufde_rabbit: "参与测试复旦EDA工具UFDE+及上板工具Rabbit",
+                other_tools: "其它工具及架构",
+                linux: "熟练应用Linux系统",
+                pytorch: "熟练使用AI框架如PyTorch",
+                lang_ability_title: "语言能力",
+                english: "英语：",
+                ielts: "IELTS 7.0（Listening: 7.5, Reading: 8.5, Writing: 6.5, Speaking: 6.0）",
+                gre: "GRE 313【等考完再加上】",
+                toefl: "TOEFL【等考完再加上】",
+                spanish: "西班牙语：",
+                spanish_course: "完成复旦大学西班牙语通识课程，计划2026年考DELE A2",
+                proficient: "精通",
+                skilled: "熟练",
+                achievements: "成就",
+                achievements_desc: "因学术卓越、科研贡献及课外领导力而受到表彰。",
+                awards_link: "查看详细奖项",
+                contact: "联系方式",
+                phone: "电话 & WhatsApp: +86 186 5282 9333",
+                email: "邮箱: m18652829333@163.com / 22307130073@m.fudan.edu.cn",
+                linkedin: "领英: www.linkedin.com/in/yanxiang-zhu",
+                github: "GitHub: https://github.com/Yanxiang-ZHU",
+                footer: "祝彦翔 · © 2025",
+                student_social: "学生工作与社会活动",
+                student_work_title: "学生工作经历",
+                student_work_intro: "积极参与学生会与班级事务，组织活动，促进学业交流。",
+                student_work_detail: "查看学生工作详情",
+                social_activities_title: "社交活动与志愿服务",
+                social_activities_intro: "参与多项社会实践与志愿活动，服务社会，提升自我。",
+                social_activities_detail: "查看社会活动详情"
+            }
+        };
+
+        function switchLanguage(lang) {
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[lang][key]) {
+                    element.textContent = translations[lang][key];
+                }
+            });
+            document.querySelectorAll('.language-switcher button').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.textContent === lang.toUpperCase()) {
+                    btn.classList.add('active');
+                }
+            });
+            localStorage.setItem('lang', lang);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const lang = localStorage.getItem('lang') || 'zh';
+            switchLanguage(lang);
+        });
+    </script>
+</body>
 </html>

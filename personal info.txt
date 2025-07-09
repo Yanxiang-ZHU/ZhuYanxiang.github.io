@@ -1,0 +1,123 @@
+祝彦翔
+
+————————基本信息————————
+照片：【照片：用美签照片】
+出生日期：2004/08/06
+现居地：中国上海
+个人介绍：本科主修微电子，专注于数字IC设计与FPGA加速【再针对不同的申请项目加一些针对的话】。
+
+————————联系方式————————
+电话号码&whatsapp：+86 186 5282 9333
+邮箱地址：18652829333@163.com （个人邮箱）22307130073@m.fudan.edu.cn （学校邮箱）
+GitHub: https://github.com/Yanxiang-ZHU
+LinkedIn: www.linkedin.com/in/yanxiang-zhu
+
+————————教育经历————————
+初中：南京师大附中树人中学  2016.9~2019.6
+高中：南京师范大学附属中学 2019.9~2022.6
+本科：复旦大学-微电子学院  2022.9~2026.6
+本科交换：美国得州大学奥斯汀分校-工程物理 2023.7~2023.8 香港大学 2024.8~2024.12
+
+————————科研兴趣————————
+Digital integrated circuits and system-level optimization
+FPGA-based hardware acceleration and neural network inference
+EDA automation tools and high-level synthesis (HLS)
+Neuromorphic computing and randomized neural architectures
+
+————————科研情况————————
+随机序列神经网络的FPGA加速实现（2023.9~2025.12）
+简介：【国自然项目，预计2025.12论文投稿，具体等会写】
+指导老师：肖江（复旦大学教授）
+项目github网站：【待整理，还没搞】
+
+————————项目经历————————
+#IC Design：
+（ADDA）
+ADC的声音解码器 https://github.com/Yanxiang-ZHU/ADC-Decoder.git
+基于给定设计指标的时钟交织型流水线SAR ADC设计 https://github.com/Yanxiang-ZHU/Ti_Pipielined_SARADC_Design.git
+（EDA）
+随机网表生成器与解析器 https://github.com/Yanxiang-ZHU/EDA-Design.git
+模拟信号数字信号混合仿真加速器 https://github.com/Yanxiang-ZHU/EDA-Design.git
+%【补充简介】
+实例C语言代码的高层次综合 https://github.com/Yanxiang-ZHU/Advanced-Digital-IC-Design.git
+基于Mockturtle的AIG电路balance和rewrite操作改进 https://github.com/Yanxiang-ZHU/Advanced-Digital-IC-Design.git
+基于A*算法的全局布线 https://github.com/Yanxiang-ZHU/Advanced-Digital-IC-Design.git
+（FPGA）
+打地鼠游戏机 https://github.com/Yanxiang-ZHU/Whack-a-Mole-GameMachine.git
+马里奥游戏机 https://github.com/Yanxiang-ZHU/FPGA_MARIO.git
+FPGA上的复杂RISCV CPU设计 https://github.com/Yanxiang-ZHU/Complex-CPU-Design-Based-on-RISC-V.git
+%Designed a pipelined RISC-V CPU on FPGA supporting RV32I ISA with exception handling, branch prediction, and instruction forwarding. Implemented on Xilinx Artix-7 using Verilog and validated with test programs.  Tools: Vivado
+#Others：
+微调Qwen 2.5模型的东京奥运会视频分析 https://github.com/Yanxiang-ZHU/Olympics-Video-Analysis.git
+微调Bert模型的前沿科学问答智能体
+
+————————参与比赛————————
+全国大学生集成电路创新大赛（赛道：RISCV CPU设计）入围华东赛区总决赛 赛道赛区TOP20【结果没出，之后再补】
+“复微杯”全国大学生电子设计竞赛（软件赛道）入围全国决赛TOP100
+“卓越杯”创新创业大赛 入围决赛
+美国大学生数学建模比赛S奖
+全国大学生数学竞赛上海三等奖
+“高教社杯”全国大学生数学建模比赛上海二等奖
+“鸣辩杯”复旦大学辩论赛
+
+————————开发能力————————
+#代码能力
+硬件语言：
+（精通）Verilog / VHDL
+高层次语言：
+（精通）Python C 
+（熟练）C++ MATLAB
+
+#EDA工具
+Quartus ii（配合Altera DE2开发板开发）, Vivado（配合Xilinx XC7A35T&XC7A200T开发）, ModelSim
+Synopsys DC (Design Compiler)
+参与测试EDA工具UFDE+及上板工具Rabbit
+
+#其它工具及架构
+熟练应用Linux系统
+熟练使用AI框架如PyTorch
+
+————————专业储备————————
+GPA（复旦大学绩点改革后映射成绩）：3.70/3.00  百分制成绩 92/100
+专业课能力：
+【后续附上成绩单及课程表】
+修读完成数字逻辑基础、嵌入式处理器与芯片系统设计、计算机软件基础、专用集成电路设计方法、FPGA结构原理和应用、数字集成电路设计自动化基础、EDA系统软件分析和设计方法学、模拟集成电路设计原理等专业进阶课程
+专业兴趣：
+【数字IC+FPGA设计，具体再补】
+
+————————语言能力————————
+英语：
+IELTS 7.0  (Listening: 7.5 Reading: 8.5 Writing: 6.5 Speaking: 6.0)
+GRE 313 （Verbal: 146 Quant: 167）
+TOEFL 【等考完再加上】
+
+西班牙语：
+【完成复旦大学西班牙语通识课程，计划2026年考DELE A2】
+
+————————获得荣誉————————
+NITORI似鸟国际奖学金（复旦大学优秀学生奖学金一等奖，学校TOP3%）
+冯氏奖学金（获评冯氏学者 Fung Scholars）
+复旦大学优秀团员
+荣昶-复旦创芯发展奖学金交流访学奖
+复旦大学优秀志愿者
+南师附中学生领袖奖
+
+————————体育活动————————
+2024年复旦大学运动会 4*400m 金牌 3:57.04
+400m单项 第五名 58.23
+2025年复旦大学运动会 4*400m 银牌 3:53.98
+【补照片，两个领奖台】
+
+————————学生工作————————
+1. 复旦大学微电子学院学生会秘书处部长（2023.1~2024.1）
+组织10+场活动，参与人数超500人
+起草5份制度文件，提升组织效率
+
+2. 学习委员（2016.9 - 2022.6）
+组织日常学习研讨会及学习讲座等
+
+————————社会活动—————————
+复旦大学回返高中宣讲（学校十佳）
+云南沅梦支教活动（STEM支教）
+复旦大学校友走访
+【补照片】
